@@ -17,7 +17,7 @@ export default function ResultCard({ result }) {
         <span className="text-rose-500 font-bold text-2xl animate-pulse shadow-[0_0_10px_#f87171]">
           {result.delay} minutes
         </span>
-      </p>
+      </p>  
 
       <p className="text-gray-700 text-md mb-1">
         <strong className="text-purple-600">Weather:</strong> {result.weather}
