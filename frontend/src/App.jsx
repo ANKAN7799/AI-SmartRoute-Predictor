@@ -44,8 +44,6 @@
 //   );
 // }
 
-
-
 // import { useState } from 'react';
 // import './App.css';
 // import Header from './components/Header';
@@ -65,7 +63,7 @@
 //   const handlePredict = async ({ source, destination, time }) => {
 //     setLoading(true);
 //     setError(null);
-    
+
 //     try {
 //        const res = await fetch("http://localhost:5000/predict", {
 //       // const res = await fetch("https://ai-smartroute-backend.onrender.com/predict", {
@@ -86,7 +84,7 @@
 //       setDistance(data.distance);
 //     } catch (err) {
 //       console.error('Prediction error:', err);
-//       setError(err.message.includes('Failed to fetch') 
+//       setError(err.message.includes('Failed to fetch')
 //         ? 'Cannot connect to server. Make sure the backend is running on http://localhost:5000'
 //         : err.message
 //       );
@@ -99,21 +97,21 @@
 //     <div className="min-h-screen bg-gradient-to-br from-indigo-100 to-purple-50 flex flex-col">
 //       <Header />
 //       <InputCard onPredict={handlePredict} />
-      
+
 //       {error && (
 //         <div className="max-w-xl mx-auto mt-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl">
 //           <p className="font-bold">Error:</p>
 //           <p>{error}</p>
 //         </div>
 //       )}
-      
+
 //       {loading && (
 //         <div className="flex flex-col items-center mt-6 text-indigo-600 font-semibold">
 //           <div className="animate-spin rounded-full h-10 w-10 border-t-4 border-b-4 border-indigo-500 mb-3"></div>
 //           <p className="animate-pulse">🚀 Predicting route delay... hang tight!</p>
 //         </div>
 //       )}
-      
+
 //       <MapSection geojson={geojson} distance={distance} duration={duration} />
 //       <ResultCard result={result} />
 //       <Footer />
@@ -121,16 +119,15 @@
 //   );
 // }
 
-
-
-import { useState } from 'react';
-import './App.css';
-import Header from './components/Header';
-import InputCard from './components/Inputcard';
-import MapSection from './components/MapSection';
-import ResultCard from './components/Resultcard';
-import Footer from './components/Footer';
-import { predictDelay } from './services/api';
+import { useState } from "react";
+import "./App.css";
+import Header from "./components/Header";
+import InputCard from "./components/Inputcard";
+import MapSection from "./components/MapSection";
+import ResultCard from "./components/Resultcard";
+import Footer from "./components/Footer";
+import { predictDelay } from "./services/api";
+import toast from "react-hot-toast";
 
 export default function App() {
   const [geojson, setGeojson] = useState(null);
@@ -143,21 +140,24 @@ export default function App() {
   const handlePredict = async ({ source, destination, time }) => {
     setLoading(true);
     setError(null);
-    
+
     try {
-      // Use the API service instead of direct fetch
       const data = await predictDelay(source, destination, time);
-      
+
       setResult(data);
       setGeojson(data.geojson);
       setDuration(data.duration);
       setDistance(data.distance);
+
+      // ⭐🔥 Toast for result
+      toast.success(`🚀 Prediction Ready! Estimated Delay: ${data.delay} min`);
     } catch (err) {
-      console.error('Prediction error:', err);
-      
-      // Better error messages
-      if (err.message.includes('Failed to fetch')) {
-        setError('Cannot connect to server. Please check if the backend is running.');
+      console.error("Prediction error:", err);
+
+      if (err.message.includes("Failed to fetch")) {
+        setError(
+          "Cannot connect to server. Please check if the backend is running."
+        );
       } else {
         setError(err.message);
       }
@@ -170,32 +170,26 @@ export default function App() {
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 to-purple-50 flex flex-col">
       <Header />
       <InputCard onPredict={handlePredict} />
-      
+
       {error && (
         <div className="max-w-xl mx-auto mt-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl">
           <p className="font-bold">Error:</p>
           <p>{error}</p>
         </div>
       )}
-      
+
       {loading && (
         <div className="flex flex-col items-center mt-6 text-indigo-600 font-semibold">
           <div className="animate-spin rounded-full h-10 w-10 border-t-4 border-b-4 border-indigo-500 mb-3"></div>
-          <p className="animate-pulse">🚀 Predicting route delay... hang tight!</p>
+          <p className="animate-pulse">
+            🚀 Predicting route delay... hang tight!
+          </p>
         </div>
       )}
-      
+
       <MapSection geojson={geojson} distance={distance} duration={duration} />
       <ResultCard result={result} />
       <Footer />
     </div>
   );
 }
-
-
-
-
-
-
-
-
