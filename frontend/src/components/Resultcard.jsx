@@ -36,3 +36,5 @@ export default function ResultCard({ result }) {
     </motion.div>
   );
 }
+
+
