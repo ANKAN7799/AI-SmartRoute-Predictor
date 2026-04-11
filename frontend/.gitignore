@@ -5,26 +5,19 @@ node_modules/
 dist/
 build/
 
-# environment variables
-.env
-.env.local
-.env.production
-
-# logs
-*.log
-
-# misc
-.DS_Store
-
-
-
-# Environment variables
+# environment variables — only ignore LOCAL secrets
 .env
 .env.local
 .env.development
 .env.development.local
 .env.test
 .env.test.local
-.env.production
 .env.production.local
-*.env
+
+# .env.production is intentionally kept — Vercel reads it at build time
+
+# logs
+*.log
+
+# misc
+.DS_Store
